@@ -1,0 +1,37 @@
+{% extends "layout/layout.html" %}
+{% block title %} Dashboard {% endblock %}
+
+{% block content %}
+
+<div method="POST" class="w-full max-w-[1366px] mx-auto absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2">
+    <form method="POST" class="max-w-sm w-[60%] mx-auto ">
+        <h1 class="text-2xl font-bold mb-4">Post a job 🚀</h1>
+
+        <div class="mb-5">
+            <label for="username" class="block mb-2 text-sm font-medium text-gray-900">Position</label>
+            <input type="text" name="job_name"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 block w-full p-2.5"
+                placeholder="Ex. Software Engineer" required>
+        </div>
+        <div class="mb-5">
+            <label for="job_level" class="block mb-2 text-sm font-medium text-gray-900">Experience level</label>
+            <select id="job_level" name="job_level" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 block w-full p-2.5 ">
+                <option selected disabled>Choose required experience level</option>
+                <option value="entry">Entry Level (Fresh Graduates)</option>
+                <option value="junior">Junior Level (1 year to 3 years)</option>
+                <option value="mid">Mid Level (3 years to 5 years)</option>
+                <option value="senior">Senior Level (5+ years)</option>
+            </select>
+        </div>
+        <div class="mb-5">
+            <label for="job_desc" class="block mb-2 text-sm font-medium text-gray-900">Description</label>
+            <textarea id="job_desc" name="job_description" rows="4"
+                class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-sky-500 focus:border-sky-500 "
+                placeholder="Add description..."></textarea>
+        </div>
+        <button type="submit"
+            class="text-white bg-sky-500 hover:bg-sky-600 focus:ring-4 focus:outline-none focus:ring-sky-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">Save</button>
+    </form>
+</div>
+
+{% endblock %}

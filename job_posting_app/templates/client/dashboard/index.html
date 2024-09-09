@@ -2,7 +2,47 @@
 {% block title %} Dashboard {% endblock %}
 
 {% block content %}
-
-
-
+<div class="w-full max-w-[1366px] mx-auto ">
+    <nav class="py-7 flex justify-between items-center">
+        <h1 class="text-4xl font-bold inline-block p-2 rounded-md">
+            👷🏼‍♂️
+            <span class="text-sky-500">Jobs</span>Dito
+        </h1>
+        <div class="flex items-center gap-5">
+            {% if g.user %}
+            <div x-data="{ open: false }" class="relative">
+                <div @click="open = ! open" class="flex items-center gap-2 cursor-pointer">
+                    <p  class="font-semibold ">{{g.user['username']}}</p>
+                    <div class="mt-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                        </svg>
+                    </div>
+                </div>
+    
+                <div x-cloak x-show="open" class="absolute bg-white divide-y shadow-md px-6 py-2 rounded-md ">
+                    <div class="flex items-center py-2 gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                    </svg>
+                    <p>Profile</p>
+                    </div>
+                    <div class="flex items-center gap-1 py-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
+                        </svg>
+                        <a href="{{ url_for('auth.logout') }}" class="">Logout</a>
+                    </div>
+                </div>
+            </div>
+            {% else%}
+            <a href="{{ url_for('auth.register') }}" class="font-semibold text-sky-500">Register</a>
+            <a href="{{ url_for('auth.login') }}" class="bg-sky-500 py-2 px-7 text-white rounded-lg">Sign in</a>
+            {% endif %}
+        </div>
+    </nav>
+    
+</div>
 {% endblock %}

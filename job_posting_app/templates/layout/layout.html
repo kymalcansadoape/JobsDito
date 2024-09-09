@@ -4,12 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>{% block title %} Job Post App {%endblock%}</title>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <title>{% block title %} {%endblock%} | Job Post App </title>
 </head>
+<style>
+    [x-cloak] { display: none !important; }
+</style>
 <body>
     
     {% block content%}
-        <h1 class="bg-red-400"></h1>
+
     {% endblock %}
 
 </body>

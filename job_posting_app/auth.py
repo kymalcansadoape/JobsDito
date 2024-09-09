@@ -10,11 +10,13 @@ from job_posting_app.db import get_db
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 
+
 @bp.route('/register', methods=('GET', 'POST'))
 def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        roles = request.form['roles']
         db = get_db()
         error = None
 
@@ -22,19 +24,22 @@ def register():
             error = 'Username is required.'
         elif not password:
             error = 'Password is required.'
+        elif not roles:
+            error = 'Select a role.'
+
 
         if error is None:
             try:
                 db.execute(
-                    "INSERT INTO user (username, password) VALUES (?, ?)",
-                    (username, generate_password_hash(password)),
+                    """INSERT INTO users (username, password, roles) VALUES (?, ?, ?)""",
+                    (username, generate_password_hash(password), roles),
                 )
                 db.commit()
             except db.IntegrityError:
                 error = f"User {username} is already registered."
             else:
                 return redirect(url_for("auth.login"))
-
+            
         flash(error)
 
     return render_template('auth/register.html')
@@ -47,7 +52,7 @@ def login():
         db = get_db()
         error = None
         user = db.execute(
-            'SELECT * FROM user WHERE username = ?', (username,)
+            'SELECT * FROM users WHERE username = ?', (username,)
         ).fetchone()
 
         if user is None:
@@ -58,7 +63,10 @@ def login():
         if error is None:
             session.clear()
             session['user_id'] = user['id']
-            return redirect(url_for('index'))
+            if user['roles'] == 'company':
+                return redirect(url_for('admin.admin'))
+            else:
+                return redirect(url_for('index'))
 
         flash(error)
 
@@ -72,7 +80,7 @@ def load_logged_in_user():
         g.user = None
     else:
         g.user = get_db().execute(
-            'SELECT * FROM user WHERE id = ?', (user_id,)
+            'SELECT * FROM users WHERE id = ?', (user_id,)
         ).fetchone()
 
 
