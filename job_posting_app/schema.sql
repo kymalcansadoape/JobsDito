@@ -47,13 +47,14 @@ CREATE TABLE jobs(
 
 CREATE TABLE applicant(
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    first_name TEXT,
-    last_name TEXT,
+    first_name TEXT DEFAULT NULL,
+    last_name TEXT DEFAULT NULL,
+    location TEXT DEFAULT NULL,
     user_id INTEGER,
-    resume_path TEXT,
-    years_of_experience INTEGER,
+    resume_path TEXT DEFAULT NULL,
+    years_of_experience INTEGER DEFAULT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY(user_id) REFERENCES users(id)
+    FOREIGN KEY(user_id) REFERENCES users(id) 
 );
 
 

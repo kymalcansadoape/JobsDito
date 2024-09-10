@@ -8,30 +8,35 @@
             👷🏼‍♂️
             <span class="text-sky-500">Jobs</span>Dito
         </h1>
+
+        
         <div class="flex items-center gap-5">
             {% if g.user %}
-            <div x-data="{ open: false }" class="relative">
+            <div x-data="{ open: false }" @click.outside="open = false" class="relative">
                 <div @click="open = ! open" class="flex items-center gap-2 cursor-pointer">
-                    <p  class="font-semibold ">{{g.user['username']}}</p>
+                    <p class="font-semibold ">{{g.user['username']}}</p>
                     <div class="mt-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-6">
                             <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
                         </svg>
                     </div>
                 </div>
-    
-                <div x-cloak x-show="open" class="absolute bg-white divide-y shadow-md px-6 py-2 rounded-md ">
-                    <div class="flex items-center py-2 gap-1">
+
+                <div x-cloak x-show="open" x-transition class="absolute bg-white divide-y shadow-md px-6 py-2 rounded-md ">
+                    <a href="{{ url_for('applicant.applicant_profile', id=g.user['id']) }}" class="flex items-center py-2 gap-1">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="size-6">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                    </svg>
-                    <p>Profile</p>
-                    </div>
+                            stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                        </svg>
+                        <span>Profile</span>
+                    </a>
                     <div class="flex items-center gap-1 py-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
                         </svg>
                         <a href="{{ url_for('auth.logout') }}" class="">Logout</a>
                     </div>
@@ -43,6 +48,48 @@
             {% endif %}
         </div>
     </nav>
-    
+
 </div>
+<div class="bg-sky-500 max-w-[1366px] w-full mx-auto rounded-2xl">
+    <p class="text-white text-5xl font-bold text-center py-16">Jobs</p>
+</div>
+
+<div class="w-full max-w-[1366px] mx-auto mt-4 flex items-center gap-3">
+        <input class="max-w-[350px] w-full border border-gray-300 py-3 px-3 rounded-md" type="text" placeholder="Search...">
+
+    
+        <select class="max-w-[150px] w-full border border-gray-300 py-[14px] px-3 rounded-md" name="" id="">
+            <option value="">Entry Level</option>
+            <option value="">Junior Level</option>
+            <option value="">Mid Level</option>
+            <option value="">Senior Level</option>
+        </select>
+</div>
+
+<div class="grid grid-cols-4 w-full max-w-[1366px] mx-auto mt-4">
+
+
+    <div class="md:col-span-1 col-span-4 ">
+        <div class="shadow-md p-6 rounded-md">
+            <h1 class="text-3xl font-bold">Software Engineer</h1>
+            <div class="flex items-center gap-2">
+                <p class="text-gray-400">Makati City, NCR</p>
+                <p class="bg-green-500 rounded-full inline-block text-white py-1 px-2 font-semibold text-xs">Junior Level</p>
+            </div>
+            <p class="mt-2 line-clamp-6">Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                Odio minus cupiditate rerum ipsa nisi nesciunt quis perspiciatis
+                dolor ea laboriosam omnis vitae fugiat totam officia eligendi
+                voluptates mollitia consequuntur ex aspernatur, at maxime
+                dolores sequi. Voluptatem incidunt possimus id modi?
+            </p>
+            <div class="w-full mt-3">
+                <button class="bg-sky-500 w-full text-white py-2 rounded-md">Quick Apply</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
 {% endblock %}

@@ -1,6 +1,7 @@
 import os
 
 from flask import Flask, render_template
+from job_posting_app.db import get_db
 
 
 def create_app(test_config=None):
@@ -22,6 +23,7 @@ def create_app(test_config=None):
 
     @app.route('/')
     def index():
+
         return render_template('client/dashboard/index.html')
     
     from . import db
@@ -32,5 +34,8 @@ def create_app(test_config=None):
 
     from . import admin
     app.register_blueprint(admin.bp)
+
+    from . import applicant
+    app.register_blueprint(applicant.bp)
     
     return app

@@ -1,0 +1,72 @@
+{% extends "layout/layout.html" %}
+{% block title %} Dashboard {% endblock %}
+
+{% block content %}
+
+<section class="max-w-[1006px] w-full md:px-0 mx-auto px-6">
+    <p class="text-5xl font-bold text-sky-500 my-11">Profile</p>
+    <div class="grid grid-cols-12 gap-6">
+        <div class="col-span-3 bg-sky-500 rounded-2xl h-[600px] p-4">
+            <div>
+                <p class="text-3xl text-white font-bold">JobsDito</p>
+            </div>
+            <div class="flex flex-col gap-4  mt-12">
+                <div class="flex gap-2 items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1"
+                        stroke="currentColor" class="size-6 stroke-white">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                    </svg>
+                    <p class="text-white text-xl">Profile Setup</p>
+                </div>
+                <div class="flex gap-2 items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="size-6 stroke-white">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M8.242 5.992h12m-12 6.003H20.24m-12 5.999h12M4.117 7.495v-3.75H2.99m1.125 3.75H2.99m1.125 0H5.24m-1.92 2.577a1.125 1.125 0 1 1 1.591 1.59l-1.83 1.83h2.16M2.99 15.745h1.125a1.125 1.125 0 0 1 0 2.25H3.74m0-.002h.375a1.125 1.125 0 0 1 0 2.25H2.99" />
+                    </svg>
+
+                    <p class="text-white text-xl">Application list</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-span-9">
+            <div class="border border-gray-300 rounded-xl h-full">
+                <div class="px-5 pt-12">
+                    <h1 class="text-3xl font-black">Profile</h1>
+                    <form method="POST" enctype="multipart/form-data">
+                        <div class="mt-2">
+                            <label class="text-lg font-medium" for="first_name">First name</label>
+                            <input class="w-full p-3 border border-gray-200 rounded-lg" value="{{ request.form['first_name'] or applicant.first_name }}" type="text" name="first_name" id="first_name" placeholder="Ex. John">
+                        </div>
+
+                        <div class="mt-2">
+                            <label class="text-lg font-medium" for="last_name">Last Name</label>
+                            <input class="w-full p-3 border border-gray-200 rounded-lg" value="{{ request.form['last_name'] or applicant.last_name }}"  type="text" name="last_name" id="last_name" placeholder="Ex. Doe">
+                        </div>
+
+                        <div class="mt-2">
+                            <label class="text-lg font-medium" for="location">Location</label>
+                            <input class="w-full p-3 border border-gray-200 rounded-lg" value="{{ request.form['location_name'] or applicant.location }}"  type="text" name="location" id="location" placeholder="Ex. Manila City">
+                        </div>
+
+                        <div class="mt-2">
+                            <label class="text-lg font-medium" for="years_of_experience">Year of Experience</label>
+                            <input class="w-full p-3 border border-gray-200 rounded-lg" type="number" value="{{ request.form['years_of_experience'] or applicant.years_of_experience }}" name="years_of_experience" id="years_of_experience" placeholder="">
+                        </div>
+
+                        <div class="mt-2">
+                            <label class="text-lg font-medium" for="resume">Resume</label>
+                            <input class="w-full p-3 border border-gray-200 rounded-lg" type="file" name="resume" id="resume" placeholder="Ex. John Doe">
+                        </div>
+                        <div class="mt-2">
+                            <button class="bg-sky-500 text-white px-12 py-1 rounded-md" type="submit">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

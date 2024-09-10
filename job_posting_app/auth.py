@@ -30,10 +30,13 @@ def register():
 
         if error is None:
             try:
-                db.execute(
+                cursor = db.cursor()
+                cursor.execute(
                     """INSERT INTO users (username, password, roles) VALUES (?, ?, ?)""",
                     (username, generate_password_hash(password), roles),
                 )
+                user_id = cursor.lastrowid
+                cursor.execute("INSERT INTO applicant (user_id) VALUES (?)", (user_id,))
                 db.commit()
             except db.IntegrityError:
                 error = f"User {username} is already registered."

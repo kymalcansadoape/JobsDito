@@ -24,6 +24,8 @@ def admin():
     db.close()
     return render_template('admin/index.html', jobs=jobs, number_of_jobs=number_of_jobs)
 
+
+
 @bp.route("/admin/jobs", methods=['GET', 'POST'])
 @login_required
 def add_job():
