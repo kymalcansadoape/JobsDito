@@ -8,52 +8,38 @@
         <div class="mb-5">
             <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Join as</label>
 
-            <select id="countries" name="roles" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
-                <option selected>Choose a role</option>
+            <select id="countries" name="roles"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+                <option value="no_role" selected>Choose a role</option>
                 <option value="applicant">Applicant</option>
                 <option value="company">Company</option>
             </select>
         </div>
         <div class="mb-5">
             <label for="username" class="block mb-2 text-sm font-medium text-gray-900">Your username</label>
-            <input
-                type="text"
-                id="username"
-                name="username"
+            <input type="text" id="username" name="username"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 block w-full p-2.5"
-                placeholder="johndoe"
-                required
-            >
+                placeholder="johndoe" required>
         </div>
         <div class="mb-5">
             <label for="password" class="block mb-2 text-sm font-medium text-gray-900">
                 Your
                 password
             </label>
-            <input
-                type="password"
-                id="password"
-                name="password"
+            <input type="password" id="password" name="password"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 block w-full p-2.5"
-                required
-                placeholder="Must have 6 characters"
-            >
-            <p class="text-sm mt-1">Already have an account? <a class="text-sm font-semibold text-sky-500 underline" href="{{ url_for('auth.login') }}">Sign in.</a></p>
-
-        </div>
-        <!-- <div class="flex items-start mb-5">
-            <div class="flex items-center h-5">
-                <input
-                    id="remember"
-                    type="checkbox"
-                    value=""
-                    class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-sky-300 "
-                    required
-                >
+                required placeholder="Must have 6 characters">
+                
+                {% for message in get_flashed_messages() %}
+                <div class="flash">
+                    <p class="text-xs text-red-500">{{ message }}</p>
+                </div>
+                {% endfor %}
             </div>
-            <label for="remember" class="ms-2 text-sm font-medium text-gray-900 ">Remember me</label>
-        </div> -->
-        <button type="submit" class="text-white bg-sky-500 hover:bg-sky-600 focus:ring-4 focus:outline-none focus:ring-sky-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">Submit</button>
+            <p class="text-sm mt-1">Already have an account? <a class="text-sm font-semibold text-sky-500 underline"
+                    href="{{ url_for('auth.login') }}">Sign in.</a></p>
+        <button type="submit"
+            class="text-white bg-sky-500 hover:bg-sky-600 focus:ring-4 focus:outline-none focus:ring-sky-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">Submit</button>
     </form>
 </div>
 {% endblock %}

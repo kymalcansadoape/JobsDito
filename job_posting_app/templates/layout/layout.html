@@ -6,6 +6,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700,900&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.css"  rel="stylesheet" />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="{{url_for('static', filename='js/upload_admin_image.js')}}"></script>
     <title>{% block title %} {%endblock%} | Job Post App </title>
 </head>
 <style>
@@ -18,11 +21,141 @@
 </style>
 <body>
     
+    {% block nav %}
+    <nav class="py-7 fixed top-0 flex justify-between items-center px-6 lg:px-0 !w-full right-0 z-[9999] -translate-x-1/2 bg-white shadow-md left-1/2">
+        <div class="container mx-auto flex justify-between items-center px-6 lg:px-0 !w-full">
+            <a href="{{url_for('index')}}" class="md:text-4xl text-2xl font-bold inline-block p-2 rounded-md">👷🏼‍♂️
+                <span class="text-sky-500">Jobs</span>Dito
+            </a>
+    
+            <div x-data="{ open: false }" class="flex md:hidden flex-col justify-center">
+                <div  @click="open = !open" class="relative mx-auto">
+                        <button class="w-10 h-10 relative focus:outline-none">
+                            <span class="sr-only">Open main menu</span>
+                            <div class="block w-5 absolute left-1/2 transform  -translate-x-1/2">
+                                <span aria-hidden="true" class="block absolute h-0.5 w-5 bg-current transform transition duration-500 ease-in-out" :class="{'rotate-45': open,' -translate-y-1.5': !open }"></span>
+                                <span aria-hidden="true" class="block absolute  h-0.5 w-5 bg-current   transform transition duration-500 ease-in-out" :class="{'opacity-0': open } "></span>
+                                <span aria-hidden="true" class="block absolute  h-0.5 w-5 bg-current transform  transition duration-500 ease-in-out" :class="{'-rotate-45': open, ' translate-y-1.5': !open}"></span>
+                            </div>
+                        </button>
+                </div>
+    
+                <div x-cloak x-show="open"  
+                    x-transition:enter="transition ease-out duration-300"
+                    x-transition:enter-start="opacity-0 scale-90"
+                    x-transition:enter-end="opacity-100 scale-100"
+                    x-transition:leave="transition ease-in duration-300"
+                    x-transition:leave-start="opacity-100 scale-100"
+                    x-transition:leave-end="opacity-0 scale-90" class="w-[80%] top-[50px] absolute z-[9999] bg-white shadow-md p-5 left-1/2 rounded-lg -translate-x-1/2 mt-5">
+                    <div class="flex flex-col divide-y">
+                        <a class="text-center py-2 text-sky-500 font-medium" href="{{url_for('index')}}">Home</a>
+                        <a class="text-center py-2 text-sky-500 font-medium" href="{{url_for('jobs')}}">Jobs</a>
+    
+                        {% if g.user %}
+                            {% if g.user['roles'] == 'applicant' %}
+                            <a class="text-center py-2 text-sky-500 font-medium" href="{{ url_for('applicant.applicant_profile', id=g.user['id']) }}">Profile</a>
+                            <a class="text-center py-2 text-sky-500 font-medium" href="{{ url_for('applicant.application_list') }}">Application List</a>
+                            {% else %}
+                            <a class="text-center py-2 text-sky-500 font-medium" href="{{ url_for('admin.admin_profile', id=g.user['id']) }}">Profile</a>
+                            
+                            {% endif %}
+                            <a class="text-center  font-medium bg-sky-500 py-2 w-full rounded-md text-white flex justify-center gap-1" href="{{ url_for('auth.logout') }}" >
+                                <span>
+                                    Logout
+                                </span>    
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
+                                </svg>
+                            </a>
+                        {% else %}
+                            <a class="text-center py-2 text-sky-500 font-medium" href="{{ url_for('auth.register') }}">Register</a>
+                            <a class="text-center  font-medium bg-sky-500 py-2 w-full rounded-md text-white" href="{{ url_for('auth.login') }}">Sign In</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+    
+            <div class="md:flex hidden items-center gap-6">
+                <a class="font-semibold text-sky-500 " href="{{ url_for('index') }}">Home</a>
+                <a href="{{ url_for('jobs') }}" class="font-semibold text-sky-500 ">Jobs</a>
+            </div>
+            <div class="items-center gap-5 md:flex hidden">
+                {% if g.user %}
+                <div x-data="{ open: false }" @click.outside="open = false" class="relative">
+                    <div @click="open = ! open"
+                        class="flex items-center gap-2 cursor-pointer">
+                        <p class="font-semibold ">{{ g.user['username'] }}</p>
+                        <div class="mt-1" class="rotate-0">
+                            <svg class="size-6 rotate-0 duration-[450ms]" :class="open ? 'rotate-180' : ' '" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div x-cloak x-transition x-show="open"
+                        class="absolute bg-white divide-y z-[9999] shadow-md px-6 py-2 rounded-md ">
+    
+                        {% if g.user['roles'] == 'applicant' %}
+    
+                        <a href="{{ url_for('applicant.applicant_profile', id=g.user['id']) }}"
+                            class="flex items-center py-2 gap-1 cursor-pointer">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                            </svg>
+                            <span>Profile</span>
+                        </a>
+    
+                        <a href="{{ url_for('applicant.application_list') }}"
+                            class="flex items-center py-2 gap-1 cursor-pointer">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                            </svg>
+                            <span>Application List</span>
+                        </a>
+                        {% else %}
+                        <a href="{{ url_for('admin.admin_profile', id=g.user['id']) }}"
+                            class="flex items-center py-2 gap-1 cursor-pointer">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                            </svg>
+                            <span>Profile</span>
+                        </a>
+                        {% endif %}
+                        <div class="flex items-center gap-1 py-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
+                            </svg>
+                            <a href="{{ url_for('auth.logout') }}" class>Logout</a>
+                        </div>
+                    </div>
+                </div>
+                {% else%}
+                <a href="{{ url_for('auth.register') }}"
+                    class="font-semibold text-sky-500">Register</a>
+                <a href="{{ url_for('auth.login') }}"
+                    class="bg-sky-500 py-2 px-7 text-white rounded-lg">Sign in</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+    {% endblock %}
     <main>
         {% block content%}
     
         {% endblock %}
     </main>
 
+
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+      </script>
 </body>
 </html>

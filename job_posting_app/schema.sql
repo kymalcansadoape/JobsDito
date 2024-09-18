@@ -18,7 +18,12 @@ CREATE TABLE company(
     first_name TEXT,
     last_name TEXT,
     company_name TEXT,
+    contact_number TEXT,
+    email TEXT,
+    website_url TEXT,
+    description TEXT,
     user_id INTEGER,
+    company_logo TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY(user_id) REFERENCES users(id)
 
@@ -28,10 +33,10 @@ CREATE TABLE applications(
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     applicant_id INTEGER,
     job_id INTEGER,
+    status TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY(applicant_id) REFERENCES applicant(id),
     FOREIGN KEY(job_id) REFERENCES jobs(id)
-
 );
 
 CREATE TABLE jobs(
@@ -39,6 +44,7 @@ CREATE TABLE jobs(
     job_name TEXT,
     job_description TEXT,
     job_level TEXT,
+    job_location TEXT,
     company_id INTEGER,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY(company_id) REFERENCES company(id)

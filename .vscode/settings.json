@@ -1,0 +1,8 @@
+{
+    "editor.minimap.autohide": true,
+    "editor.minimap.enabled": false,
+    "editor.minimap.scale": 2,
+    "editor.minimap.showRegionSectionHeaders": true,
+    "editor.minimap.renderCharacters": false,
+
+}

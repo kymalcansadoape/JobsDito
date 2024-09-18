@@ -1,0 +1,136 @@
+{% extends "layout/layout.html" %}
+{% block title %} Job {% endblock %}
+
+{% block content %}
+
+
+
+<div class="max-w-[1366px] w-full mx-auto px-6 xl:px-0 mt-36">
+    <a href="{{ url_for('admin.admin') }}" class="my-12 flex justify-start gap-2 items-center cursor-pointer">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+            class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+        </svg>
+        <p class="font-semibold ">Back</p>
+    </a>
+    <div class="grid grid-cols-12 gap-5">
+        <div class="col-span-12 lg:col-span-4 flex flex-col gap-5">
+            <div class="bg-white shadow-lg rounded-2xl px-6 py-8">
+                <h1 class="text-5xl font-black text-sky-500">{{number_of_applicants}}</h1>
+                <p class="font-medium font-lg">Total Applicants</p>
+            </div>
+            <div class="bg-white shadow-lg  rounded-2xl px-6 py-8">
+                <div class="flex justify-between items-start">
+                    <h1 class="text-2xl font-black inline-block w-[60%]">{{ job.job_name }}</h1>
+                    <p class="inline-block w-[40%] text-end">{{ job.job_location }}</p>
+                </div>
+                <div>
+                    {% if job.job_level == 'entry' %}
+                    <p class="bg-green-500 rounded-full inline-block text-white py-1 px-2 font-semibold text-xs">Entry
+                        Level</p>
+                    {% elif job.job_level == 'junior' %}
+                    <p class="bg-blue-500 rounded-full inline-block text-white py-1 px-2 font-semibold text-xs">Junior
+                        Level</p>
+                    {% elif job.job_level == 'mid' %}
+                    <p class="bg-red-500 rounded-full inline-block text-white py-1 px-2 font-semibold text-xs">Mid Level
+                    </p>
+                    {% elif job.job_level == 'senior' %}
+                    <p class="bg-yellow-500 rounded-full inline-block text-white py-1 px-2 font-semibold text-xs">Senior
+                        Level</p>
+                    {% endif %}
+                </div>
+                <p>
+                    {{job.job_description}}
+                </p>
+            </div>
+        </div>
+        <div class="lg:col-span-8 col-span-12">
+            <div class="bg-white shadow-lg rounded-2xl px-6 py-8">
+
+                <h1 class="mb-3 text-2xl font-black">{{ job.job_name }} Applicants List</h1>
+                <div class="relative overflow-x-auto sm:rounded-lg">
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 ">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 ">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">
+                                    First Name
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Last Name
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Location
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Years Of Experience
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Resume
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Status
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{ job_applicants.first }}
+                            {% for job_applicant in job_applicants %}
+                            <tr class="odd:bg-white  even:bg-gray-50 ">
+                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                    {{ job_applicant.first_name }}
+                                </th>
+                                <td class="px-6 py-4">
+                                    {{ job_applicant.last_name }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{ job_applicant.location }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{ job_applicant.years_of_experience }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    <a href="{{ url_for('admin.download_resume', id=job_applicant.applicant_id) }}"
+                                        class="text-blue-400 underline"> Download Resume</a>
+                                </td>
+                                <td x-data="{ color: '{{ application.status }}' }" class="px-6 py-4">
+                                    <form method="POST"  x-ref="form" action="{{ url_for('admin.update_status', id=job_applicant.applicant_id, job_id=job.id) }}" class="flex">
+                                        <select 
+                                            x-model="color"
+                                            @change="$refs.form.submit()"
+                                            :class="{ 
+                                            'bg-green-200': color === 'accepted', 
+                                            'bg-yellow-200': color === 'review', 
+                                            'bg-sky-200': color === 'interview', 
+                                            'bg-red-200': color === 'rejected', 
+                                            'bg-gray-200': color === 'received'
+                                            }" name="application_status" class="border-0 rounded-md  focus:ring-0 px-3 text-black font-medium">
+                                            <option disabled>Select Status</option>
+                                            <option value="received" {% if application.status == 'received' %} selected {% endif %}>Received</option>
+                                            <option value="review" {% if application.status == 'review' %} selected {% endif %}>Review</option>
+                                            <option value="interview" {% if application.status == 'interview' %} selected {% endif %}>Interview</option>
+                                            <option value="rejected" {% if application.status == 'rejected' %} selected {% endif %}>Rejected</option>
+                                            <option value="accepted" {% if application.status == 'accepted' %} selected {% endif %}>Accepted</option>
+                                        </select>
+                                
+                                        <button
+                                            :class="{'bg-green-200': color === 'accepted','bg-yellow-200': color === 'review',
+                                            'bg-sky-200': color === 'interview','bg-red-200': color === 'rejected','bg-gray-200': color === 'received'}"
+                                            class="p-1 rounded-tr-md rounded-br-md hidden"
+                                            type="submit">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 stroke-black">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                                            </svg>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

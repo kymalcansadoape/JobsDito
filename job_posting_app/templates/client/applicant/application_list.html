@@ -1,0 +1,98 @@
+{% extends "layout/layout.html" %}
+{% block title %} Dashboard {% endblock %}
+
+{% block content %}
+
+<section class="max-w-[1006px] w-full lg:px-0 mx-auto px-6 mt-32 lg:mt-48">
+
+
+    <div class="grid grid-cols-12 gap-6">
+        <div class="md:col-span-3 hidden lg:block bg-sky-500 rounded-2xl h-[600px] p-4">
+            <div>
+                <p class="text-3xl text-white font-bold">JobsDito</p>
+            </div>
+            <div class="flex flex-col gap-4  mt-12">
+                <a href="{{ url_for('applicant.applicant_profile', id=g.user['id']) }}" class="flex gap-2 items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1"
+                        stroke="currentColor" class="size-6 stroke-white">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                    </svg>
+                    <p class="text-white text-xl">Profile Setup</p>
+                </a>
+                <a href="{{ url_for('applicant.application_list') }}" class="flex gap-2 items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="size-6 stroke-white">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M8.242 5.992h12m-12 6.003H20.24m-12 5.999h12M4.117 7.495v-3.75H2.99m1.125 3.75H2.99m1.125 0H5.24m-1.92 2.577a1.125 1.125 0 1 1 1.591 1.59l-1.83 1.83h2.16M2.99 15.745h1.125a1.125 1.125 0 0 1 0 2.25H3.74m0-.002h.375a1.125 1.125 0 0 1 0 2.25H2.99" />
+                    </svg>
+                    <p class="text-white text-xl">Application list</p>
+                </a>
+            </div>
+        </div>
+        <div class="lg:col-span-9 col-span-12">
+            <div class="border border-gray-300 rounded-xl h-full">
+                <div class="px-5 pt-12">
+                    <div class="relative overflow-x-auto">
+                        <table class="w-full text-sm text-left rtl:text-right text-gray-500 ">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">
+                                        Job
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Company
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Location
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Status
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if number_of_applications == 0 %}
+                                    <tr class="bg-white border-b ">
+                                        <td colspan="100" class="py-3">
+                                            <p class="text-center text-2xl font-semibold">No Applications.</p>
+                                        </td>
+                                    </tr>
+                                {%else %}
+                                    {% for application in application_list %}
+                                    <tr class="bg-white border-b ">
+                                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                            {{application.job_name}}
+                                        </th>
+                                        <td class="px-6 py-4">
+                                            Company X
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ application.job_location }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {% if application.status == 'rejected' %}
+                                                <span class="bg-red-200 py-1 rounded-full px-3 text-red-800 font-medium">Rejected</span>
+                                            {% elif application.status == 'recevied' %}
+                                                <span class="bg-gray-200 py-1 rounded-full px-3 text-gray-800 font-medium">Received</span>
+                                            {% elif application.status == 'review' %}
+                                                <span class="bg-yellow-200 py-1 rounded-full px-3 text-yellow-800 font-medium">Review</span>
+                                            {% elif application.status == 'interview' %}
+                                                <span class="bg-sky-200 py-1 rounded-full px-3 text-sky-800 font-medium">Interview</span>
+                                            {% elif application.status == 'accepted' %}
+                                                <span class="bg-green-200 py-1 rounded-full px-3 text-green-800 font-medium">Accepted</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                {% endif %}
+                            </tbody>
+                        </table>    
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

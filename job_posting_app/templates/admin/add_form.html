@@ -1,5 +1,5 @@
 {% extends "layout/layout.html" %}
-{% block title %} Dashboard {% endblock %}
+{% block title %} Add Job {% endblock %}
 
 {% block content %}
 
@@ -10,6 +10,12 @@
         <div class="mb-5">
             <label for="username" class="block mb-2 text-sm font-medium text-gray-900">Position</label>
             <input type="text" name="job_name"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 block w-full p-2.5"
+                placeholder="Ex. Software Engineer" required>
+        </div>
+        <div class="mb-5">
+            <label for="username" class="block mb-2 text-sm font-medium text-gray-900">Location</label>
+            <input type="text" name="job_location"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 block w-full p-2.5"
                 placeholder="Ex. Software Engineer" required>
         </div>

@@ -4,10 +4,12 @@
 {% block content %}
 <div class="w-full max-w-[1366px] mx-auto absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2">
     <form method="POST" class="max-w-sm w-[60%] mx-auto ">
-        <h1 class="text-2xl font-bold mb-4">Login to your accout 🧑🏼‍💻</h1>
-        
+        <h1 class="text-2xl font-bold mb-4">Login to your account 🧑🏼‍💻</h1>
         <div class="mb-5">
-            <label for="username" class="block mb-2 text-sm font-medium text-gray-900">Your username</label>
+            <label for="username" class="block mb-2 text-sm font-medium text-gray-900">
+                Your
+                username
+            </label>
             <input
                 type="text"
                 id="username"
@@ -30,10 +32,10 @@
                 required
                 placeholder="Must have 6 characters"
             >
-            <p class="text-sm mt-1">Don't have an account? <a class="text-sm font-semibold text-sky-500 underline mt-1" href="{{ url_for('auth.register') }}">Register</a></p>
-
+            <p class="text-sm mt-1">Don't have an account?
+                <a class="text-sm font-semibold text-sky-500 underline mt-1" href="{{ url_for('auth.register') }}">Register</a>
+            </p>
         </div>
-
         <button type="submit" class="text-white bg-sky-500 hover:bg-sky-600 focus:ring-4 focus:outline-none focus:ring-sky-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">Submit</button>
     </form>
 </div>

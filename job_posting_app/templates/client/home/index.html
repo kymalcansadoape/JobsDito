@@ -1,0 +1,29 @@
+{% extends "layout/layout.html" %}
+{% block title %} JobsDito {% endblock %}
+
+{% block content %}
+
+    <section class="max-w-[1366px] px-6 lg:px-0 w-full mx-auto mt-60">
+        <div class="flex lg:flex-row flex-col mt-11">
+            <div  data-aos-duration="1000" data-aos="fade-right" class="lg:w-[50%] w-full flex flex-col gap-5 lg:items-start md:items-center justify-center">
+                <p class="text-sky-500 text-xl lg:text-start font-medium">Looking for job?</p>
+                <p class="lg:text-7xl md:text-5xl text-start md:text-center lg:text-start text-6xl text-gray-700 leading-[1]">
+                    <span class="font-semibold mx-auto lg:start-start text-start md:text-center inline-block">Find your</span>
+                    <span class="font-semibold mx-auto lg:start-start text-start md:text-center inline-block">dream job</span>
+                    <span class="font-semibold mx-auto lg:start-start text-start md:text-center inline-block">with us easily!</span>
+                </p>
+                <p class="font-medium text-lg w-full md:w-[60%] lg:text-start text-start md:text-center">Find jobs,employment, and careeer opportunities easily through 
+                    <span class="text-sky-500 font-bold">Jobs</span><span class="font-bold">Dito</span>!
+                </p>
+
+                <div class="mt-5">
+                    <a href="{{ url_for('jobs') }}" class="text-white bg-sky-500 font-medium px-5 text-lg py-3 rounded-xl">Find Jobs!</a>
+                </div>
+            </div>
+            <div data-aos="zoom-out-left" data-aos-duration="1000" class="md:w-[50%] w-full lg:block hidden">
+                <img class="rounded-lg" src="{{url_for('static', filename='img/hero_image.jpg')}}" alt="">
+            </div>
+        </div>
+    </section>
+
+{%endblock%}

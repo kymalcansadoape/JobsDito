@@ -24,7 +24,9 @@ def register():
             error = 'Username is required.'
         elif not password:
             error = 'Password is required.'
-        elif not roles:
+        elif len(password) < 8 :
+            error = 'Password must be 8 characters.'
+        elif roles == 'no_role':
             error = 'Select a role.'
 
 
@@ -32,11 +34,15 @@ def register():
             try:
                 cursor = db.cursor()
                 cursor.execute(
-                    """INSERT INTO users (username, password, roles) VALUES (?, ?, ?)""",
+                    "INSERT INTO users (username, password, roles) VALUES (?, ?, ?)",
                     (username, generate_password_hash(password), roles),
                 )
                 user_id = cursor.lastrowid
-                cursor.execute("INSERT INTO applicant (user_id) VALUES (?)", (user_id,))
+                print(user_id)
+                if roles == 'applicant':
+                    cursor.execute("INSERT INTO applicant (user_id) VALUES (?) ", (user_id,))
+                if roles == 'company':
+                    cursor.execute("INSERT INTO company (user_id) VALUES (?) ", (user_id,))
                 db.commit()
             except db.IntegrityError:
                 error = f"User {username} is already registered."
@@ -66,10 +72,11 @@ def login():
         if error is None:
             session.clear()
             session['user_id'] = user['id']
+
             if user['roles'] == 'company':
                 return redirect(url_for('admin.admin'))
             else:
-                return redirect(url_for('index'))
+                return redirect(url_for('jobs'))
 
         flash(error)
 
@@ -97,7 +104,24 @@ def login_required(view):
     def wrapped_view(**kwargs):
         if g.user is None:
             return redirect(url_for('auth.login'))
-
         return view(**kwargs)
 
+    return wrapped_view
+
+def admin_middleware(view):
+    @functools.wraps(view)
+    def wrapped_view(**kwargs):
+        if g.user["roles"] != 'company':
+            return redirect(url_for('jobs'))
+        return view(**kwargs)
+    
+    return wrapped_view
+
+def applicant_middleware(view):
+    @functools.wraps(view)
+    def wrapped_view(**kwargs):
+        if g.user["roles"] != 'applicant':
+            return redirect(url_for('admin.admin'))
+        return view(**kwargs)
+    
     return wrapped_view

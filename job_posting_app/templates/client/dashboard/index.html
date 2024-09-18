@@ -2,91 +2,135 @@
 {% block title %} Dashboard {% endblock %}
 
 {% block content %}
-<div class="w-full max-w-[1366px] mx-auto ">
-    <nav class="py-7 flex justify-between items-center">
-        <h1 class="text-4xl font-bold inline-block p-2 rounded-md">
-            👷🏼‍♂️
-            <span class="text-sky-500">Jobs</span>Dito
-        </h1>
 
-        
-        <div class="flex items-center gap-5">
-            {% if g.user %}
-            <div x-data="{ open: false }" @click.outside="open = false" class="relative">
-                <div @click="open = ! open" class="flex items-center gap-2 cursor-pointer">
-                    <p class="font-semibold ">{{g.user['username']}}</p>
-                    <div class="mt-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-                        </svg>
-                    </div>
-                </div>
-
-                <div x-cloak x-show="open" x-transition class="absolute bg-white divide-y shadow-md px-6 py-2 rounded-md ">
-                    <a href="{{ url_for('applicant.applicant_profile', id=g.user['id']) }}" class="flex items-center py-2 gap-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                        </svg>
-                        <span>Profile</span>
-                    </a>
-                    <div class="flex items-center gap-1 py-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
-                        </svg>
-                        <a href="{{ url_for('auth.logout') }}" class="">Logout</a>
-                    </div>
-                </div>
+<div class="lg:px-0 px-6 mt-32">
+    <div class="bg-sky-500 max-w-[1366px] w-full mx-auto rounded-2xl">
+        <p class="text-white text-5xl font-bold text-center py-16">Jobs</p>
+    </div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3500)" class="flashes flex items-center p-4 my-4 text-sm text-red-800 max-w-[1366px] w-full mx-auto border border-red-300 rounded-lg bg-red-50"role="alert">
+            {% for category, message in messages %}
+            <svg class="flex-shrink-0 inline w-4 h-4 me-3 str" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+            </svg>
+            <span class="sr-only">Info</span>
+            <div>
+                <span class="font-medium">Error Applying!</span> <span class="{{ category }}" >{{ message}}</span>
+                <a class="underline" href="{{ url_for('applicant.applicant_profile', id=g.user['id']) }}">Setup profile</a>
             </div>
-            {% else%}
-            <a href="{{ url_for('auth.register') }}" class="font-semibold text-sky-500">Register</a>
-            <a href="{{ url_for('auth.login') }}" class="bg-sky-500 py-2 px-7 text-white rounded-lg">Sign in</a>
-            {% endif %}
+            {% endfor %}
         </div>
-    </nav>
+        {% endif %}
+    {% endwith %}
+
+
 
 </div>
-<div class="bg-sky-500 max-w-[1366px] w-full mx-auto rounded-2xl">
-    <p class="text-white text-5xl font-bold text-center py-16">Jobs</p>
+
+<form method="GET" action="{{ url_for('jobs') }}"
+    class="w-full max-w-[1366px] mx-auto mt-4 flex md:flex-row flex-col items-center gap-3 lg:px-0 px-6 ">
+    <input class="md:max-w-[350px] w-full border border-gray-300 py-3 px-3 rounded-md" type="text" name="search"
+        value="{{ request.args.get('search', '') }}" placeholder="Search...">
+
+
+    <select class="md:max-w-[150px] w-full border border-gray-300 py-[14px] px-3 rounded-md" name="job_level">
+        <option value="">All Levels</option>
+        <option value="entry" {% if request.args.get('job_level')=='entry' %} selected {% endif %}>Entry Level</option>
+        <option value="junior" {% if request.args.get('job_level')=='junior' %} selected {% endif %}>Junior Level
+        </option>
+        <option value="mid" {% if request.args.get('job_level')=='mid' %} selected {% endif %}>Mid Level</option>
+        <option value="senior" {% if request.args.get('job_level')=='senior' %} selected {% endif %}>Senior Level
+        </option>
+    </select>
+    <button type="submit"
+        class="bg-sky-500 px-4 py-3 rounded-md text-white font-medium w-full md:w-auto">Search</button>
+</form>
+
+
+<div class="w-full max-w-[1366px] mx-auto mt-4">
+    {% if request.args.get('search') or request.args.get('job_level') %}
+    <p class="text-gray-500">Showing results for
+        {% if request.args.get('search') %}
+        "<strong>{{ request.args.get('search') }}</strong>"
+        {% endif %}
+        {% if request.args.get('job_level') %}
+        {% if request.args.get('search') %} and {% endif %}
+        job level "<strong>{{ request.args.get('job_level') }}</strong>"
+        {% endif %}
+    </p>
+    {% endif %}
 </div>
 
-<div class="w-full max-w-[1366px] mx-auto mt-4 flex items-center gap-3">
-        <input class="max-w-[350px] w-full border border-gray-300 py-3 px-3 rounded-md" type="text" placeholder="Search...">
+<div class="grid grid-cols-4 w-full gap-4 max-w-[1366px] mx-auto mt-4 lg:px-0 px-6 ">
 
-    
-        <select class="max-w-[150px] w-full border border-gray-300 py-[14px] px-3 rounded-md" name="" id="">
-            <option value="">Entry Level</option>
-            <option value="">Junior Level</option>
-            <option value="">Mid Level</option>
-            <option value="">Senior Level</option>
-        </select>
-</div>
-
-<div class="grid grid-cols-4 w-full max-w-[1366px] mx-auto mt-4">
-
-
-    <div class="md:col-span-1 col-span-4 ">
-        <div class="shadow-md p-6 rounded-md">
-            <h1 class="text-3xl font-bold">Software Engineer</h1>
+    {% for job in jobs %}
+    <div class="lg:col-span-1 md:col-span-2 col-span-4">
+        <div class="shadow-md bg-white h-full p-6 rounded-md flex flex-col justify-between" x-data="{ open: false }" >
+            <h1 class="text-2xl font-bold w-[75%]">{{ job.job_name }}</h1>
             <div class="flex items-center gap-2">
-                <p class="text-gray-400">Makati City, NCR</p>
-                <p class="bg-green-500 rounded-full inline-block text-white py-1 px-2 font-semibold text-xs">Junior Level</p>
+                <p class="text-gray-400">{{ job.job_location }}</p>
+                {% if job.job_level == 'entry' %}
+                <p class="bg-green-500 rounded-full inline-block text-white py-1 px-2 font-semibold text-xs">Entry Level</p>
+                {% elif job.job_level == 'junior' %}
+                <p class="bg-blue-500 rounded-full inline-block text-white py-1 px-2 font-semibold text-xs">Junior Level</p>
+                {% elif job.job_level == 'mid' %}
+                <p class="bg-red-500 rounded-full inline-block text-white py-1 px-2 font-semibold text-xs">Mid Level</p>
+                {% elif job.job_level == 'senior' %}
+                <p class="bg-yellow-500 rounded-full inline-block text-white py-1 px-2 font-semibold text-xs">Senior Level</p>
+                {% endif %}
             </div>
-            <p class="mt-2 line-clamp-6">Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                Odio minus cupiditate rerum ipsa nisi nesciunt quis perspiciatis
-                dolor ea laboriosam omnis vitae fugiat totam officia eligendi
-                voluptates mollitia consequuntur ex aspernatur, at maxime
-                dolores sequi. Voluptatem incidunt possimus id modi?
+
+            
+            <p class="line-clamp-5">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Culpa beatae placeat exercitationem sint quod rem veritatis repellendus omnis aspernatur fugiat, harum repudiandae atque dolor excepturi veniam est voluptates. Itaque distinctio tempora sunt! Tenetur ratione fugit magnam id. Totam eligendi iste recusandae minima nam, nisi, blanditiis suscipit, vero quibusdam asperiores rerum!
+                
             </p>
-            <div class="w-full mt-3">
-                <button class="bg-sky-500 w-full text-white py-2 rounded-md">Quick Apply</button>
+
+            {% if g.user != None %}
+                {% if job['id'] in applied_job_ids %}
+                    <p class="text-sm font-semibold text-gray-300 my-1">You already applied for this job.</p>
+                {% endif %}
+            {% endif%}
+
+            <button class="bg-sky-500 w-full text-white py-2 rounded-md my-1" type="button" @click="open = true">
+                View Job
+            </button>
+
+            <div x-cloak x-show="open" class="fixed inset-0 z-[9999] bg-gray-800 bg-opacity-75 flex items-center justify-center px-6 lg:px-0">
+                <div class="bg-white rounded-lg shadow-lg max-w-lg p-6 relative">
+                    <div class="flex items-start justify-between">
+                        <h2 class="text-2xl font-bold mb-4 w-[80%]">{{ job.job_name }}</h2>
+                        <div class="flex justify-end w-[20%]">
+                            <button @click="open = ! open" class=" text-gray-500 hover:bg-gray-100 p-2 rounded-full ">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <p class="text-gray-500 mb-4">{{ job.job_location }}</p>
+                    <p class="text-gray-700">{{ job.job_description }}  Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque pariatur illo recusandae labore quas obcaecati libero reiciendis officiis laboriosam nam ab natus tempore ducimus qui repudiandae odio voluptatum, eaque perspiciatis! Aliquam non a nam? Tempora ab iste officiis animi velit. </p>
+                    {% if g.user != None %}
+                        {% if job['id'] in applied_job_ids %}
+                        <form method="POST" action="{{url_for('applicant.apply_job', applicant_id=g.user['id'], job_id=job['id'])}}" class="w-full mt-3">
+                            <button class="bg-sky-800 w-full text-white py-2 rounded-md" disabled>Applied</button>
+                        </form>
+                        {% else %}
+                        <form method="POST" action="{{url_for('applicant.apply_job', applicant_id=g.user['id'], job_id=job['id'])}}" class="w-full mt-3">
+                            <button class="bg-sky-500 w-full text-white py-2 rounded-md">Quick Apply</button>
+                        </form>
+                        {% endif %}
+                    {% else %}
+
+                        <p class="mt-4 text-red-500">Please log in to apply for this job.</p>
+                        <a href="{{ url_for('auth.login') }}" class="mt-4 block bg-sky-500 text-center font-semibold text-white py-2 px-4 rounded-md">Login</a>
+                    {% endif %}
+                    
+                </div>
             </div>
         </div>
     </div>
+{% endfor %}
 </div>
 
 
